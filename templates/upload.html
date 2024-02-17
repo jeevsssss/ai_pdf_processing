@@ -1,0 +1,31 @@
+<!-- upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keywords and Feedback</title>
+</head>
+<body>
+    <h1>Keywords Extracted</h1>
+    <ul>
+        {% for phrase in keyword_phrases %}
+            <li>{{ phrase }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Negative Feedback about {{ product_name }}</h2>
+    <ul>
+        {% for feedback in negative_feedback_product %}
+            <li>{{ feedback }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Overall Negative Feedback</h2>
+    <ul>
+        {% for feedback in overall_negative_feedback %}
+            <li>{{ feedback }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
