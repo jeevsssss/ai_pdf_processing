@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of PDFs</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .pdf-file-name {
+            width: 30%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .product-input {
+            width: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .pdf-file-name {
+                width: 40%;
+            }
+
+            .product-input {
+                width: 60%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-200">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold mb-8 text-center">List of PDFs</h1>
+            <ul>
+                {% for pdf_file in pdf_files %}
+                <li class="mb-6 border-b border-gray-300 pb-6 flex items-center justify-between">
+                    <form action="/analyze" method="post" class="w-full">
+                        <input type="hidden" name="selected_pdf" value="{{ pdf_file }}">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="pdf-file-name text-lg mr-4">{{ pdf_file }}</span>
+                            <div class="flex items-center">
+                                <input type="text" name="product_name" placeholder="Enter Product Name"
+                                    class="product-input py-1 px-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow mr-4">
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Start
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
