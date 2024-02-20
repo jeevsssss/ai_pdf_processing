@@ -1,0 +1,22 @@
+{
+    "summary": "The novel coronavirus known as COVID-19, it is firstly detected in the city of China that is Wuhan. In December 2019, the World Health Organization acknowledged that this virus could cause respiratoryinfections through coughs, flu, and pneumonia. A database of X-ray, CT-Scan images from patients with common bacterial pneumonia, confirmed Covid-19 infection, and common cases, were used to automatically detect Coronavirus infection. The purpose of the study was to evaluate the effectiveness of CO VID-19acquisition. It confirms the importance of CT scan images for the detection of COvid-19 pneumonia seizures.",
+    "negative_feedback": [
+        "This is not only\novercrowding in medical system, it makes patients more\nfrustrated, and also causes higher risk of cross-infection by\nother patients.",
+        "At the peak of the epidemic, medical experts\nwere frustrated, with emergency departments (EDs), and\nIntensive Care Units (ICUs) expanding beyond capacity\nand resources.",
+        "The result is that the medical systems\nare overcrowded.",
+        "The medical demonstration\nof COVID-19 is complex and can be characterized like\nmild-fever, cough and nausea.",
+        "The novel coronavirus known as COVID-19, it is\nfirstly detected in the city of China that is Wuhan."
+    ],
+    "keywords": "coronavirus 2019, coronavirus covid, coronavirus covid19, coronavirus pneumonia, diagnose coronavirus",
+    "organizations": [
+        "TMU",
+        "Teerthanker Mahaveer University",
+        "rediffinail",
+        "Facul",
+        "WHO",
+        "of Engineering & Computing Sciences",
+        "CCSIT",
+        "IEEE",
+        "World Health Organization"
+    ]
+}

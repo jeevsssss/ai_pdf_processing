@@ -1,0 +1,7 @@
+# Function to generate summary using BERT
+# def generate_summary(text):
+#     summary = bert_summarizer(text, min_length=100, max_length=250)
+#     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+#     # summarizer = pipeline("summarization", model="Falconsai/text_summarization")
+#     final_summary = summarizer(summary, max_length=130, min_length=100, do_sample=False)
+#     return final_summary[0]['summary_text']

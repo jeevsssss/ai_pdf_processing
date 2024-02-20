@@ -7,6 +7,16 @@
     <title>Analysis Results</title>
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .container {
+            width: 75%;
+            margin: 0 auto; /* Center the container horizontally */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 p-8">
@@ -43,6 +53,10 @@
             <button id="downloadPDFButton" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
                 Download PDF
             </button>
+            <button id="rerunAnalysisButton" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Re-run Analysis
+            </button>
+            <div id="loadingIndicator" class="hidden">Loading...</div>
         </div>
     </div>
 
@@ -59,6 +73,31 @@
             };
 
             html2pdf().from(element).set(options).save();
+        });
+
+        // JavaScript for handling the re-run analysis button
+        document.getElementById('rerunAnalysisButton').addEventListener('click', function() {
+            const selectedPdf = '{{ selected_pdf }}';
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.classList.remove('hidden'); // Show loading indicator
+            fetch('/rerun_analysis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selected_pdf: selectedPdf })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                alert(data.message);
+                location.reload(); // Reload the page to display updated analysis results
+            })
+            .catch(error => {
+                loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                console.error('Error:', error);
+                alert('Error re-running analysis.');
+            });
         });
     </script>
 </body>

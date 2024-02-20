@@ -1,0 +1,18 @@
+{
+    "summary": "Cloud computing is gaining popularity among businesses because it improves speed, efficiency, outcomes, reliability, and security. Cloud forensics has advanced due to advancements in Big Data Analytics, Artificial Intelligence, and machine learning. A detailed comparative analysis of differentapproaches of machine learning, deep learning, neural networks has been presented in the paper. The paper also provides a detail information on cloud forensics as well as the research trends that have been going on in this field over the past few years. The review paper seeks tocomprehend the significance of various machine learning models which would helpcloud forensics advance significantly. It also provides an overview of the research that has been done in the field of digital forensics.",
+    "negative_feedback": [
+        ": s, Random classifiers,\n: a s MLP, and Bayes\nsources 348 (C4.5) | produced the\nworst results.\n",
+        "The results show that J48\noutperformed all 4 classifiers for calculating different classes,\nwhile Nave Bayes produced the worst results.\n\n",
+        "The false percentage of pockets and the\ntrue percentage of packets were detected more efficiently by\nNave Bayes than by random forest.",
+        "Ess 1S 1g) y i. \u2018 3H s 5 Dlib supports\nobserved that various logical issues, including the choice of several\nML method and dataset type, have troubled researchers.",
+        "Through the use of two\nclassifiers, they examined network behavior in their article\nthat may be divided into misuse detection and anomaly\ndetection."
+    ],
+    "keywords": "cloud forensic, forensic cloud, cloud forensics, forensics cloud, cloud crime",
+    "organizations": [
+        "vit.ac",
+        "School of Computer Science Engineering Vellore Institute of Technology",
+        "in",
+        "Computer Science and Engineering",
+        "Vellore Institute of Technology"
+    ]
+}
