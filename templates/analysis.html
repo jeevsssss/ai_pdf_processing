@@ -12,23 +12,55 @@
 <body class="bg-gray-100 p-8">
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-8">Analysis Results</h1>
-        <div class="mb-8">
-            <h2 class="text-xl font-bold mb-4">Keywords Extracted</h2>
-            <ul class="list-disc pl-6">
-                {% for keyword in keywords %}
-                <li class="mb-2">{{ keyword }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div>
-            <h2 class="text-xl font-bold mb-4">Negative Feedback about '{{ product_name }}'</h2>
-            <ul class="list-disc pl-6">
-                {% for feedback in negative_feedback %}
-                <li class="mb-2">{{ feedback }}</li>
-                {% endfor %}
-            </ul>
+        <table class="w-full border-collapse border border-gray-200">
+            <tr class="border-b border-gray-200">
+                <th class="p-3 font-bold text-left">Keywords</th>
+                <th class="p-3 font-bold text-left">Summary</th>
+                <th class="p-3 font-bold text-left">Negative Sentiment</th>
+                <th class="p-3 font-bold text-left">Extracted Organizations</th>
+            </tr>
+            <tr class="border-b border-gray-200">
+                <td class="p-3">{{ keywords }}</td>
+                <td class="p-3">{{ summary }}</td>
+                <td class="p-3">
+                    <ul class="list-disc pl-6">
+                        {% for feedback in negative_feedback %}
+                        <li class="mb-2">{{ feedback }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td class="p-3">
+                    <ul class="list-disc pl-6">
+                        {% for organization in organizations %}
+                        <li class="mb-2">{{ organization }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <!-- Download buttons -->
+        <div class="flex justify-between mt-8">
+            <button id="downloadPDFButton" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                Download PDF
+            </button>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script>
+        // JavaScript for handling the download PDF button
+        document.getElementById('downloadPDFButton').addEventListener('click', function() {
+            const element = document.querySelector('table'); // Choose the element to download as PDF
+            const options = {
+                filename: 'analysis_results.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(options).save();
+        });
+    </script>
 </body>
 
 </html>
