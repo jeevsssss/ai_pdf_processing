@@ -45,7 +45,7 @@ token_classifier = pipeline(
 # Load the sentiment classifier pipeline
 distilled_student_sentiment_classifier = pipeline(
     model="lxyuan/distilbert-base-multilingual-cased-sentiments-student",
-    return_all_scores=True
+    top_k=None
 )
 
 # Initialize BART Summarization model
@@ -219,25 +219,28 @@ def generate_summary(text):
     summary_ids = summarization_model.generate(inputs, max_length=150, min_length=125, length_penalty=2.0, num_beams=8, early_stopping=True)
     summary = summarization_tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     return summary
-
-
 def analyze_feedback(text):
     meaningful_sentences = filter_meaningful_sentences(text)
     feedback_with_scores = []
 
     # Analyze sentiment for each sentence and store it with its sentiment score
     for sentence in meaningful_sentences:
-        feedback = distilled_student_sentiment_classifier(sentence)
+        # Truncate the sentence if it exceeds the maximum token length
+        truncated_sentence = sentence[:512]
+
+        # Analyze sentiment for the truncated sentence
+        feedback = distilled_student_sentiment_classifier(truncated_sentence)
+
         for result in feedback:
             for res in result:
                 if res['label'] == 'negative':
-                    feedback_with_scores.append((sentence, res['score']))
+                    feedback_with_scores.append((truncated_sentence, res['score']))
 
     # Sort the feedback sentences based on their sentiment scores (higher scores are more negative)
     sorted_feedback = sorted(feedback_with_scores, key=lambda x: x[1], reverse=True)
 
     # Extract the top 5 most negative feedback sentences
-    top_5_negative_feedback = [sentence for sentence, score in sorted_feedback[:5]]
+    top_5_negative_feedback = [item[0] for item in sorted_feedback[:5]]
 
     return top_5_negative_feedback
 

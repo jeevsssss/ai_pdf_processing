@@ -1,0 +1,20 @@
+{
+    "summary": "This paper introduces a classifierapproach for prediction of weather condition. It shows how the Naive Bayes and Chi square algorithm can be utilized for classification purpose. The project aimsto estimate the weather by utilizing predictive analysis. It is a web application with a graphical User Interface. User will login to the system utilizing his user ID and password. It will take some information such as current outlook, temperature, Humidity and wind condition. This system will take this information and predict weather after analyzing the input information with the information in database. Using two basic functions to be specific classification (training) and testing (testing) will be performed. The outcomes demonstrated that these data mining procedures can besufficient for weather forecasting.",
+    "negative_feedback": [
+        "It is one\nof the most difficult issues the world over.",
+        "The difficulties of weather forecasting, among others, are\nlearning weather representation utilizing an enormous volume\n\nof weather dataset.",
+        "In machine learning,\nunsupervised learning alludes to the issue of trying to hidden\nstructure in unlabeled information [1].",
+        "The outcomes acquired by BPN\nmodel are sustained to a Hopfield Network.",
+        "Recall = Sensitivity = TP / (TP + FN)\n\nWhere, TP and FN are the numbers of true positive and false\nnegative predictions for the considered class.\n\n"
+    ],
+    "keywords": "classify weather, predicting weather, weather prediction, predict weather, weather forecasting",
+    "organizations": [
+        "ResearchGate International Journal of Computer Applications",
+        "International Journal of Computer Applications",
+        "BGC Trust University Bangladesh",
+        "BGC Trust University Bangladesh BGC Trust University Bangladesh Premier University",
+        "researchgate",
+        "Tanni Dhoom Premier University",
+        "net"
+    ]
+}

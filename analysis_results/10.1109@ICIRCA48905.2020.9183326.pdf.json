@@ -1,0 +1,15 @@
+{
+    "summary": "Optical Character Recognition (OCR) is the computerized.conversion of text or making a digital copy of the text through handwritten. documents, printed text, or from natural images. OCR has applications in Healthcare division for PET sweeps, Banking segment, Robotics, and so forth and is as yet developing with time. The need for text recognition software came because the exponentiallyamount of data in the world is growing at an exponential rate. With OCR, people do not need to retype huge reports when making adigital copy of them. It empowers a machine to perceive the.content from a picture and store it in a manner that is simpler to process upon later.",
+    "negative_feedback": [
+        "Henceforth, there\nare various systems created for character division,\nand most by far of them are content unequivocal and\nmay not work with various substances.\n\n",
+        "Additionally, since it isn't\nyet 100% precise, the extracted text despite everything must\nbe crosschecked for errors, and for limited text, it is simply not\nworth utilizing it as it tends to be quicker to do physically\ncompared to modern OCR systems.\n\n",
+        "It allowed the blind people to have written text read to\nthem out loud by a machine.",
+        "Also, since back in the 1950s,\ntechnology was not so advance and there was not sufficient\ncomputing power, the advancement of OCR confronted\nnumerous difficulties like speed and accuracy",
+        "Then, the\nMSER (Maximally Stable External Region) is\ndetected and the part which is not required is deleted.\n"
+    ],
+    "keywords": "extraction ocr, recognition ocr, recognition ocrs, applications ocr, documents ocr",
+    "organizations": [
+        "Department of Computer Science & Engineering Amity School for Engineering and Technology Amity University Uttar Pradesh",
+        "mail"
+    ]
+}
