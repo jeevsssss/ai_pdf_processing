@@ -21,47 +21,70 @@ DATABASE_FOLDER = 'database'
 app.config['DATABASE_FOLDER'] = DATABASE_FOLDER
 os.makedirs(app.config['DATABASE_FOLDER'], exist_ok=True)  # Ensure the database directory exists
 
-# Initialize Sentiment Analyzer
-analyzer = SentimentIntensityAnalyzer()
-
 # Load the English language model for spaCy
 nlp = spacy.load("en_core_web_sm")
 
-# Initialize BERT Summarizer
-bert_summarizer = Summarizer()
-
-# Initialize KeyBERT model
-keybert_model = KeyBERT()
-
 # Set the logging level for transformers library
 logging.getLogger("transformers").setLevel(logging.WARNING)
-
-# Load the token classification pipeline
-model_checkpoint = "xlm-roberta-large-finetuned-conll03-english"
-token_classifier = pipeline(
-    "token-classification", model=model_checkpoint, aggregation_strategy="simple"
-)
-
-# Load the sentiment classifier pipeline
-distilled_student_sentiment_classifier = pipeline(
-    model="lxyuan/distilbert-base-multilingual-cased-sentiments-student",
-    top_k=None
-)
-
-# Initialize BART Summarization model
-summarization_model_checkpoint = "facebook/bart-large-cnn"
-summarization_tokenizer = AutoTokenizer.from_pretrained(summarization_model_checkpoint)
-summarization_model = AutoModelForSeq2SeqLM.from_pretrained(summarization_model_checkpoint)
 
 # Directory to store analysis results as JSON files
 ANALYSIS_RESULTS_DIR = 'analysis_results'
 os.makedirs(ANALYSIS_RESULTS_DIR, exist_ok=True)
 
+# Initialize lazy-loaded models and libraries
+bert_summarizer = None
+keybert_model = None
+summarization_tokenizer = None
+summarization_model = None
+token_classifier = None
+distilled_student_sentiment_classifier = None
+
+# Initialize Sentiment Analyzer
+analyzer = SentimentIntensityAnalyzer()
+
+# Initialize BERT Summarizer (lazy-loaded)
+def get_bert_summarizer():
+    global bert_summarizer
+    if bert_summarizer is None:
+        bert_summarizer = Summarizer()
+    return bert_summarizer
+
+# Initialize KeyBERT model (lazy-loaded)
+def get_keybert_model():
+    global keybert_model
+    if keybert_model is None:
+        keybert_model = KeyBERT()
+    return keybert_model
+
+# Load the token classification pipeline (lazy-loaded)
+def get_token_classifier():
+    global token_classifier
+    if token_classifier is None:
+        model_checkpoint = "xlm-roberta-large-finetuned-conll03-english"
+        token_classifier = pipeline("token-classification", model=model_checkpoint, aggregation_strategy="simple")
+    return token_classifier
+
+# Load the sentiment classifier pipeline (lazy-loaded)
+def get_sentiment_classifier():
+    global distilled_student_sentiment_classifier
+    if distilled_student_sentiment_classifier is None:
+        distilled_student_sentiment_classifier = pipeline(
+            model="lxyuan/distilbert-base-multilingual-cased-sentiments-student", top_k=None
+        )
+    return distilled_student_sentiment_classifier
+
+# Load the BART Summarization model (lazy-loaded)
+def get_summarization_model():
+    global summarization_tokenizer, summarization_model
+    if summarization_tokenizer is None:
+        summarization_model_checkpoint = "facebook/bart-large-cnn"
+        summarization_tokenizer = AutoTokenizer.from_pretrained(summarization_model_checkpoint)
+        summarization_model = AutoModelForSeq2SeqLM.from_pretrained(summarization_model_checkpoint)
+    return summarization_tokenizer, summarization_model
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -80,12 +103,10 @@ def upload_file():
     pdf_files = get_uploaded_pdfs()
     return render_template('list.html', pdf_files=pdf_files)
 
-
 @app.route('/list_pdfs')
 def list_pdfs():
     pdf_files = get_uploaded_pdfs()
     return render_template('list.html', pdf_files=pdf_files)
-
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -133,7 +154,6 @@ def analyze():
 
     return render_template('analysis.html', **analysis_results, selected_pdf=selected_pdf)
 
-
 @app.route('/rerun_analysis', methods=['POST'])
 def rerun_analysis():
     selected_pdf = request.json.get('selected_pdf')
@@ -177,7 +197,6 @@ def rerun_analysis():
     else:
         return jsonify({'error': 'PDF file not found.'}), 404
 
-
 def get_text_from_any_pdf(pdf_file):
     try:
         images = convert_from_path(pdf_file)
@@ -188,7 +207,6 @@ def get_text_from_any_pdf(pdf_file):
     except Exception as e:
         flash(f"Error extracting text from PDF: {str(e)}", 'error')
         return ""
-
 
 def preprocess_text(text):
     journal_names = ["IEEE Trans.", "ACM", "APA", "MLA", "Artif. Intell.", "Ai Soc.", "Mind", "Scientometrics"]
@@ -213,12 +231,13 @@ def preprocess_text(text):
     cleaned_text = '\n'.join(cleaned_sentences)
     return cleaned_text
 
-
 def generate_summary(text):
+    summarization_tokenizer, summarization_model = get_summarization_model()
     inputs = summarization_tokenizer.encode("summarize: " + text, return_tensors="pt", max_length=1024, truncation=True)
     summary_ids = summarization_model.generate(inputs, max_length=150, min_length=125, length_penalty=2.0, num_beams=8, early_stopping=True)
     summary = summarization_tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     return summary
+
 def analyze_feedback(text):
     meaningful_sentences = filter_meaningful_sentences(text)
     feedback_with_scores = []
@@ -229,7 +248,7 @@ def analyze_feedback(text):
         truncated_sentence = sentence[:512]
 
         # Analyze sentiment for the truncated sentence
-        feedback = distilled_student_sentiment_classifier(truncated_sentence)
+        feedback = get_sentiment_classifier()(truncated_sentence)
 
         for result in feedback:
             for res in result:
@@ -244,7 +263,6 @@ def analyze_feedback(text):
 
     return top_5_negative_feedback
 
-
 def filter_meaningful_sentences(text):
     meaningful_sentences = []
     doc = nlp(text)
@@ -253,33 +271,31 @@ def filter_meaningful_sentences(text):
             meaningful_sentences.append(sentence.text)
     return meaningful_sentences
 
-
 def extract_keywords(text):
+    keybert_model = get_keybert_model()
     keywords = keybert_model.extract_keywords(text, keyphrase_ngram_range=(1, 2), stop_words='english', top_n=5)
     return ', '.join([keyword[0] for keyword in keywords])
 
-
 def extract_organizations(doc):
+    token_classifier = get_token_classifier()
     classifier_output = token_classifier(doc)
     org_names = [item['word'] for item in classifier_output if item['entity_group'] == 'ORG']
     org_names = list(set(org_names))
     return org_names
 
-
 def get_uploaded_pdfs():
     return [file for file in os.listdir(app.config['DATABASE_FOLDER']) if file.endswith('.pdf')]
-
 
 def load_analysis_results(json_file):
     with open(json_file, 'r') as f:
         analysis_results = json.load(f)
     return analysis_results
 
-
 def save_analysis_results(analysis_results, json_file):
     with open(json_file, 'w') as f:
         json.dump(analysis_results, f, indent=4)
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
+       
