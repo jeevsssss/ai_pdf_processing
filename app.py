@@ -11,6 +11,7 @@ import re
 import json
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -152,7 +153,10 @@ def analyze():
         # Save analysis results to JSON
         save_analysis_results(analysis_results, analysis_json_path)
 
-    return render_template('analysis.html', **analysis_results, selected_pdf=selected_pdf)
+    # Find similar PDFs
+    similar_pdfs = find_similar_pdfs(selected_pdf, analysis_results['summary'])
+
+    return render_template('analysis.html', **analysis_results, selected_pdf=selected_pdf, similar_pdfs=similar_pdfs)
 
 @app.route('/rerun_analysis', methods=['POST'])
 def rerun_analysis():
@@ -193,7 +197,10 @@ def rerun_analysis():
         # Save updated analysis results to JSON
         save_analysis_results(analysis_results, analysis_json_path)
 
-        return jsonify({'message': 'Analysis re-run successfully.'}), 200
+        # Find similar PDFs
+        similar_pdfs = find_similar_pdfs(selected_pdf, analysis_results        ['summary'])
+
+        return jsonify({'message': 'Analysis re-run successfully.', 'similar_pdfs': similar_pdfs}), 200
     else:
         return jsonify({'error': 'PDF file not found.'}), 404
 
@@ -295,7 +302,35 @@ def save_analysis_results(analysis_results, json_file):
     with open(json_file, 'w') as f:
         json.dump(analysis_results, f, indent=4)
 
+def find_similar_pdfs(selected_pdf, current_summary):
+    similar_pdfs = []
+    for file in os.listdir(app.config['DATABASE_FOLDER']):
+        if file.endswith('.pdf') and file != selected_pdf:
+            summary_path = os.path.join(ANALYSIS_RESULTS_DIR, f'{file}.json')
+            if os.path.exists(summary_path):
+                with open(summary_path, 'r') as f:
+                    summary_data = json.load(f)
+                    other_summary = summary_data.get('summary', '')
+                    if other_summary:
+                        similarity_score = calculate_similarity(current_summary, other_summary)
+                        if similarity_score > 0.3:  # Adjust the similarity threshold as needed
+                            similar_pdfs.append((file, similarity_score))
+
+    similar_pdfs.sort(key=lambda x: x[1], reverse=True)
+    return similar_pdfs
+
+def calculate_similarity(text1, text2):
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform([text1, text2])
+    return cosine_similarity(tfidf_matrix[0:1], tfidf_matrix)[0,1]
+
+from flask import send_from_directory
+
+@app.route('/pdf/<path:filename>')
+def pdf(filename):
+    return send_from_directory(app.config['DATABASE_FOLDER'], filename)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
-       

@@ -1,0 +1,18 @@
+{
+    "summary": "The Coronavirus disease 2019 (COVID-19) was declared a global pandemic by the World Health Organization (WHO) on 11-Mar-20. The disease has severely impacted globally across 188 countries and territories, with the confirmed cases count reaching 24.7 million. As of 29-Aug-20, the total (cumulative) count of confirmed infected populations is 3,463,972 across India. The endpoint in India will be reached on 12-Sep-20 while endpoints in Delhi, Gujarat and Andhra Pradesh will be reach on 20- Aug-20 and 30-Jul-20 respectively.",
+    "negative_feedback": [
+        "[1] The disease has severely\nimpacted globally across 188 countries and territories,\nwith the confirmed cases count reaching 24.7 million.",
+        "Now since, dS/dt is\nnegative, we expect S to decrease with time.",
+        "[10]\npredicted the progress of COVID-19 using the SIR model\nduring the first 21-day lockdown, and concluded that only\nsocial distancing will not help to contain the spread of\nCOVID-19 if the lockdown were to be lifted after 21 days.\n",
+        "The people who have already caught the disease\nand either have recovered from it or have died.\n",
+        "Also, for\nthe sake of our analysis, considering the huge population of\nour country, we have assumed that not the whole population is\nlikely to be infected with this disease."
+    ],
+    "keywords": "predict epidemic, outbreak predictions, forecasting covid, forecasts covid, prediction epidemic",
+    "organizations": [
+        "Northwestern University",
+        "World Health Organization",
+        "AIML Great Learning",
+        "WHO",
+        "IEEE"
+    ]
+}

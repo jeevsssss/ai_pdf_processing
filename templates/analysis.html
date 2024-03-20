@@ -60,6 +60,15 @@
         </div>
     </div>
 
+    <div class="max-w-2xl mx-auto bg-white mt-8 p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Similar PDFs</h2>
+        <ul>
+            {% for pdf_file in similar_pdfs %}
+            <li><a href="{{ url_for('pdf', filename=pdf_file[0]) }}" target="_blank">{{ pdf_file[0] }}</a> (Similarity: {{ pdf_file[1] }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
         // JavaScript for handling the download PDF button
